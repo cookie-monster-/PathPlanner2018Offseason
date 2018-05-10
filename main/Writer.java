@@ -72,14 +72,16 @@ public class Writer {
 				Double[] accVel = leftAccs.get(line);
 				deltaPos=accVel[0];
 				deltaVel = accVel[1];
-				deltaAcc = accVel[2];
+				accNow = accVel[2];
 				deltaRad = accVel[3];
 				deltaX = accVel[4];
 				deltaY = accVel[5];
 
+				if(accNow>(Constants.ACC_MAX*2)) {accNow=Constants.ACC_MAX;System.out.println("ERROR: ACC TOO POS!"+" linenum: "+line);}
+				if(accNow<(Constants.ACC_MAX*-2)) {accNow=-Constants.ACC_MAX;System.out.println("ERROR: ACC TOO NEG!"+" linenum: "+line);}
+
 				posNow=posLast+deltaPos;
 				velNow=velLast+deltaVel;
-				accNow=accLast+deltaAcc;
 				radNow=radLast+deltaRad;
 				xNow=xLast+deltaX;
 				yNow=yLast+deltaY;
@@ -114,16 +116,23 @@ public class Writer {
 			if(line >= 0){
 				Double[] accVel = rightAccs.get(line);
 
-				deltaPos=accVel[0];
+				//deltaPos=accVel[0];
 				deltaVel = accVel[1];
-				deltaAcc = accVel[2];
+				accNow = accVel[2];
 				deltaRad = accVel[3];
 				deltaX = accVel[4];
 				deltaY = accVel[5];
+				deltaPos=(velLast*2+deltaVel)/2*.01;
 
+				if(accNow>(Constants.ACC_MAX*2)) {accNow=Constants.ACC_MAX;System.out.println("ERROR: ACC TOO POS!"+" linenum: "+(line+lineNum));}
+				if(accNow<(Constants.ACC_MAX*-2)) {
+					accNow=-Constants.ACC_MAX;
+					System.out.println("ERROR: ACC TOO NEG!"+" linenum: "+(line+lineNum));
+					System.out.println("deltaVel: "+deltaVel+" test_vel/deltaVel: "+(deltaVel/Constants.TEST_VEL));
+				}
+				
 				posNow=posLast+deltaPos;
 				velNow=velLast+deltaVel;
-				accNow=accLast+deltaAcc;
 				radNow=radLast+deltaRad;
 				xNow=xLast+deltaX;
 				yNow=yLast+deltaY;

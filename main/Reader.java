@@ -84,6 +84,13 @@ public class Reader {
 		return yArr;
 	}
 	public double[] getLine() {
+		double[] lineArr = new double[posLis.size()];
+		for (int i =0;i<posLis.size();i++) {
+			lineArr[i] = i;
+		}
+		return lineArr;
+	}
+	public double[] getLinex3() {
 		double[] lineArr = new double[posLis.size()*3];
 		for (int i =0;i<posLis.size();i++) {
 			lineArr[i] = i;

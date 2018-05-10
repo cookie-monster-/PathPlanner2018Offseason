@@ -9,7 +9,7 @@ public class Main {
 		/* 
 		 * Draw lines format = l.drawStraightPath(distance(ft), startVelocity(ft/s), endVelocity(ft/s));
 		 * 
-		 * Draw arcs format = a.drawArcPath(angle(degrees), circleRadius(ft), startVelocity(ft/s), endVelocity(ft/s));
+		 * Draw arcs format = a.drawArc(angle(degrees), circleRadius(ft), startVelocity(ft/s), endVelocity(ft/s));
 		 * the code will determine the distance needed based on the radius of the circle 
 		 * and how many degrees along the circle you want to turn
 		 * 
@@ -21,20 +21,20 @@ public class Main {
 		*/
 		
 		
-		l.drawStraightPath(17, 0.0, 0.0);
-		a.drawArc(20, 5, 0.0, 0.0);
-		a.drawArc(-70, -5, 0.0, 0.0);
+		l.drawStraightPath(10, 0.0, Constants.TEST_VEL);
+		a.drawArc(40, 5, Constants.TEST_VEL, 0.0);
+		/*a.drawArc(-70, -5, 0.0, 0.0);
 		a.drawArc(70, 5, 0.0, 0.0);
 		a.drawArc(-110, -5, 0.0, 0.0);
 		a.drawArc(110, 5, 0.0, 0.0);
-		
+		*/
 		Writer w = new Writer();
 		//w.printArrays();
 		w.writeFile("testPath");
 		//w.writeFile("sideGearDownfieldPath0");
 		
 		Reader r = new Reader("testPath");
-		Example ex = new Example(Plot.data().xy(r.getX(), r.getY()));
-		Example ex1 = new Example(Plot.data().xy(r.getLine(), r.getPosVelAcc()));
+		//Example ex = new Example(Plot.data().xy(r.getX(), r.getY()));
+		Example ex1 = new Example(Plot.data().xy(r.getLinex3(), r.getPosVelAcc()));
 	}
 }

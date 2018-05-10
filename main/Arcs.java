@@ -13,14 +13,16 @@ public class Arcs {
 	double acc;
 	double wheelbase = Constants.WHEELBASE;
 	double velLast;
-	double velNow;
-	double posNow;
+	double deltaVel;
+	double deltaPos;
+	double deltaAcc;
 	double posLast;
-	double accLast;
+//	double accLast;
+	double accLast2;
 	double radLast;
 	double startVel;
 	double timeStep = Constants.TIMESTEP;
-	double radians;
+	double deltaRad;
 	double totalDegrees;
 	double radius;
 	double deltaX,deltaY;
@@ -552,42 +554,44 @@ public class Arcs {
 	private void drawArcPath2() {	
 		double radiansList[]=new double[(int)lineNum];
 	    //first side
-		accLast=0;
+		accLast2=0;
 		radLast=w.getStartAng();
+		velLast=startVel;
 		double startPos = posLast;
 		for(int line = 0;line < lineNum;line++){
-				acc = findAcc(line) - accLast;
-				velNow = /*velLast + */(accLast+acc) * timeStep;
-				posNow = /*posLast + */(velLast + velNow)/*/2*/ * timeStep;
+				acc = findAcc(line);
+				deltaAcc = acc - accLast2;
+				deltaVel = acc * timeStep;
+				if(line == 0 && startVel > 0) {deltaVel+=(startVel * Constants.MAGIC_VEL_CONST / 2);}
+				deltaPos = (velLast + velLast + deltaVel)/2 * timeStep;
 				if(totalDegrees<0){
-					radians = -posNow/radius;
+					deltaRad = -deltaPos/radius;
 				}else{
-					radians = posNow/radius;//360/(wheelbase*Math.PI)/4.77464829275769;//magic num??????
+					deltaRad = deltaPos/radius;
 				}
 				
-				deltaX=(posNow*Math.cos(radLast+radians));
-				deltaY=(posNow*Math.sin(radLast+radians));
+				deltaX=(deltaPos*Math.cos(radLast+deltaRad));
+				deltaY=(deltaPos*Math.sin(radLast+deltaRad));
 
-				if(posNow!=0) {posLast+=posNow;}
-				if(velNow!=0) {velLast+=velNow;}
-				if(acc!=0) {accLast+=acc;}
-				if(radians!=0) {radLast+=radians;}
+				if(deltaPos!=0) {posLast+=deltaPos;}
+				if(deltaVel!=0) {velLast+=deltaVel;}
+				if(deltaRad!=0) {radLast+=deltaRad;}
 				
-				radiansList[line]=radians;
+				radiansList[line]=deltaRad;
 				if(backwards) {
-					velNow *= -1;
+					deltaVel *= -1;
 					acc *= -1;
-					posNow *= -1;
+					deltaPos *= -1;
 					deltaX *= -1;
 					deltaY *= -1;
 				}
-				Double[] accVel = {posNow,velNow,acc,radians,deltaX,deltaY};
-				
+				Double[] accVel = {deltaPos,deltaVel,(acc),deltaRad,deltaX,deltaY};
+				accLast2=acc;
+
 				if(totalDegrees<0){
 					if(backwards) {
 						w.addLeftAcc(accVel);
 					}else {
-						System.out.println((accLast+acc));
 						w.addRightAcc(accVel);
 					}
 				}else{
@@ -602,7 +606,7 @@ public class Arcs {
 				if(line+1==lineNum){//last one
 					//System.out.println("---left side---");
 					//System.out.println("posNow: "+(posLast+posNow));
-					System.out.println("posError: "+((startPos+totalDistance)-Math.abs((posLast+posNow))));
+					System.out.println("posError: "+((startPos+totalDistance)-Math.abs((posLast+deltaPos))));
 					String radList="";
 					for(int i=0;i<=lineNum-1;i++){
 						radList=radList+radiansList[i]+" ";
@@ -612,39 +616,39 @@ public class Arcs {
 		//second side
 		posLast =0.0;
 		velLast=startVel;
-		accLast=0;
+		accLast2=0;
 		radius-=(wheelbase/12);
 		double startAng = w.getStartAng();
 		radLast=startAng;
 		for(int line = 0;line < lineNum;line++){
 			//if(line != -1){
-				radians = radiansList[line];
+				deltaRad = radiansList[line];
 				if(totalDegrees<0){
-					posNow = (-radius*(radians+radLast-startAng)) - posLast;
+					deltaPos = (-radius*(deltaRad+radLast-startAng)) - posLast;
 				}else{
-					posNow = (radius*(radians+radLast-startAng)) - posLast;
+					deltaPos = (radius*(deltaRad+radLast-startAng)) - posLast;
 				}
-				velNow = ((posNow)/timeStep) - velLast;//*2-velLast;
-				acc = ((velNow)/timeStep) - accLast;
+				deltaVel = ((deltaPos)/timeStep) - velLast;//*2-velLast;
+				acc = ((deltaVel)/timeStep);
 
 				//System.out.println("acc: "+acc+" vel: "+velNow+" pos: "+posNow+" rad: "+radians);
 				
-				deltaX=(posNow*Math.cos((radians+radLast)));
-				deltaY=(posNow*Math.sin((radians+radLast)));
+				deltaX=(deltaPos*Math.cos((deltaRad+radLast)));
+				deltaY=(deltaPos*Math.sin((deltaRad+radLast)));
 
-				if(posNow!=0) {posLast+=posNow;}
-				if(velNow!=0) {velLast+=velNow;}
-				if(acc!=0) {accLast+=acc;}
-				if(radiansList[line]!=0) {radLast+=radiansList[line];}
+				if(deltaPos!=0) {posLast+=deltaPos;}
+				if(deltaVel!=0) {velLast+=deltaVel;}
+				if(deltaRad!=0) {radLast+=deltaRad;}
 				
 				if(backwards) {
-					velNow *= -1;
+					deltaVel *= -1;
 					acc *= -1;
-					posNow *= -1;
+					deltaPos *= -1;
 					deltaX *= -1;
 					deltaY *= -1;
 				}
-				Double[] accVel = {posNow,velNow,acc,radians,deltaX,deltaY};
+				Double[] accVel = {deltaPos,deltaVel,(acc),deltaRad,deltaX,deltaY};
+				accLast2=acc;
 				
 				if(totalDegrees<0){
 					if(backwards) {
@@ -663,7 +667,7 @@ public class Arcs {
 				if(line+1==lineNum){//last one
 					//System.out.println("---right side---");
 					//System.out.println("posNow: "+(posLast+posNow));
-					System.out.println("posError2: "+((startPos+totalDistance)-Math.abs((posLast+posNow))));
+					System.out.println("posError2: "+((startPos+totalDistance)-Math.abs((posLast+deltaPos))));
 				}
 		}
 		w.setStartAng(radLast);
@@ -672,7 +676,7 @@ public class Arcs {
 	}
 	
 	public void drawArc(double totalDegrees, double radius, double startVel, double endVel) {
-		accLast=0;
+		//accLast=0;
 		drawArcPath1(totalDegrees,radius,startVel,endVel);
 		drawArcPath2();
 	}

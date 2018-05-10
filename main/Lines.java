@@ -548,13 +548,13 @@ public class Lines {
 				if(backwards) {
 					pos = deltaPos*-1;
 					vel=deltaVel*-1;
-					accel=deltaAcc*-1;
+					accel=acc*-1;
 					x=deltaX*-1;
 					y=deltaY*-1;
 				}else {
 					pos=deltaPos;
 					vel=deltaVel;
-					accel=deltaAcc;
+					accel=acc;
 					x=deltaX;
 					y=deltaY;
 				}
@@ -575,6 +575,7 @@ public class Lines {
 		}
 		//second side
 		posLast =0.0;
+		accLast=0.0;
 		velLast=startVel;
 		for(int line = 0;line < lineNum;line++){
 			acc = findAcc(line);
@@ -587,13 +588,13 @@ public class Lines {
 			if(backwards) {
 				pos = deltaPos*-1;
 				vel=deltaVel*-1;
-				accel=deltaAcc*-1;
+				accel=acc*-1;
 				x=deltaX*-1;
 				y=deltaY*-1;
 			}else {
 				pos=deltaPos;
 				vel=deltaVel;
-				accel=deltaAcc;
+				accel=acc;
 				x=deltaX;
 				y=deltaY;
 			}
