@@ -1,6 +1,6 @@
-package main;
+package notmain;
 
-public class Arcs {
+public class Lines {
 	double acc1;
 	double acc2;
 	double acc3;
@@ -9,39 +9,23 @@ public class Arcs {
 	double acc3Lines;
 	double flatAccLines;
 	boolean backwards;
-	double lineNum;
-	double acc;
-	double wheelbase = Constants.WHEELBASE;
-	double velLast;
-	double deltaVel;
-	double deltaPos;
-	double deltaAcc;
-	double posLast;
-//	double accLast;
-	double accLast2;
-	double radLast;
-	double startVel;
-	double timeStep = Constants.TIMESTEP;
-	double deltaRad;
-	double totalDegrees;
-	double radius;
-	double deltaX,deltaY;
-    Writer w = new Writer();
-    double totalDistance;
-	
-	private void drawArcPath1(double totalDegreesX,double radiusX,double startVelX,double endVel) {
-		startVel=startVelX;
-		totalDegrees=totalDegreesX;
-		radius=radiusX;
-	    if(radius<0){
-	    	radius *= -1;
+	public void drawStraightPath(double totalDistance,double startVel,double endVel) {
+	    Writer w = new Writer();
+	    if(totalDistance<0){
+	    	totalDistance *= -1;
 	    	backwards = true;
 	    }else{
 	    	backwards = false;
 	    }
-	    totalDistance=Math.abs((2*Math.PI*radius)*(totalDegrees/360));
 		double acceleration = Constants.ACC_MAX;
 		double velocityMax = Constants.VEL_MAX;
+		double wheelbase = Constants.WHEELBASE;
+		double velLast=startVel;
+		double velNow;
+		double posNow;
+		double posLast=0.0;
+		double acc;
+		double timeStep = Constants.TIMESTEP;
 		
 		double trapTestAcc=0;
 		double trapTestVel=0;
@@ -187,7 +171,6 @@ public class Arcs {
 				trapDoubleTriDist=(newMaxVel-startVel)*trapSingleTriTime;
 				trapSingleTriTestAcc=(newMaxVel-startVel)/trapSingleTriTime;
 				bigRectDist=bigRectTime*newMaxVel;
-				
 				acc1=trapSingleTriTestAcc;
 				acc1Lines=Math.round(trapSingleTriTime/0.02*10);
 				acc1Lines/=10;
@@ -252,7 +235,8 @@ public class Arcs {
 				//real endTri, ghostStartTri
 				totalTime = Math.sqrt(4*(totalDistance+endTriDist)/acceleration);
 				totalTime = findTime(totalTime);
-				totalLineNum = findLineNum(totalTime);
+				totalLineNum = Math.round(totalTime/0.02*10);
+				totalLineNum/=10;
 				
 				boolean goodTrap=false;
 				boolean forwards=true;
@@ -345,7 +329,6 @@ public class Arcs {
 					trapDoubleTriDist=(newMaxVel-startVel)*trapSingleTriTime;
 					trapSingleTriTestAcc=(newMaxVel-startVel)/trapSingleTriTime;
 					bigRectDist=bigRectTime*newMaxVel;
-					
 					acc1=trapSingleTriTestAcc;
 					acc1Lines=Math.round(trapSingleTriTime/0.02*10);
 					acc1Lines/=10;
@@ -358,7 +341,8 @@ public class Arcs {
 				}
 				if(ghostTestVel>velocityMax){
 					//trapezoid path
-					double trapTriTime = (velocityMax-startVel)/acceleration;
+					
+					double trapTriTime = (velocityMax-startVel)/acceleration;///timeStep;
 					double trapTriSteps = trapTriTime/timeStep;
 					double trapTriTimeOff = trapTriSteps%1;
 					trapTriSteps -= trapTriTimeOff;
@@ -383,16 +367,16 @@ public class Arcs {
 					double rectDist = trapTotalTime*startVel;
 					double TRAPDIST = hexDist-rectDist;
 					double trapTestMaxVel=TRAPDIST/(trapTotalTime-(trapTriTime/2));
-					//change max velocity to get exact distance
 					trapDoubleTriDist = trapTriTime*(trapTestMaxVel-startVel);
-					}
+				}
 			}else if(endVel>startVel){
 				//real startTri, ghostEndTri
 				ghostTestVel = startTriTestAcc*(totalLineNum-1)/2*timeStep;
 				//real endTri, ghostStartTri
 				totalTime = Math.sqrt(4*(totalDistance+startTriDist)/acceleration);
 				totalTime = findTime(totalTime);
-				totalLineNum = findLineNum(totalTime);
+				totalLineNum = Math.round(totalTime/0.02*10);
+				totalLineNum/=10;
 				
 				boolean goodTrap=false;
 				boolean forwards=true;
@@ -485,7 +469,6 @@ public class Arcs {
 					trapDoubleTriDist=(newMaxVel-endVel)*trapSingleTriTime;
 					trapSingleTriTestAcc=(newMaxVel-endVel)/trapSingleTriTime;
 					bigRectDist=bigRectTime*newMaxVel;
-					
 					acc2=trapSingleTriTestAcc;
 					acc2Lines=Math.round(trapSingleTriTime/0.02*10);
 					acc2Lines/=10;
@@ -508,7 +491,6 @@ public class Arcs {
 					}
 					trapTriTime = trapTriSteps*timeStep;
 					double trapDoubleTriDist = trapTriTime*(velocityMax-endVel);
-					
 					double trapDistLeftover = hexDist - (trapDoubleTriDist+(trapTriTime*endVel));
 					double trapTimeAtMaxVel = trapDistLeftover/velocityMax;
 					double trapTotalTime = (trapTriTime)+trapTimeAtMaxVel;
@@ -524,18 +506,14 @@ public class Arcs {
 					double rectDist = trapTotalTime*endVel;
 					double TRAPDIST = hexDist-rectDist;
 					double trapTestMaxVel=TRAPDIST/(trapTotalTime-(trapTriTime/2));
+					//change max velocity to get exact distance
 					trapDoubleTriDist = trapTriTime*(trapTestMaxVel-endVel);
-				}else{
-					//triangle path
-					
 				}
 			}
-		}
-		
-		trapTestVel = trapTestAcc*((trapLineNum-1)/2)*timeStep;
+		}trapTestVel = trapTestAcc*((trapLineNum-1)/2)*timeStep;
 		if(Math.abs(hexDist)<=0.01){
-			System.out.println("ERROR: HexDist is: "+hexDist);
 			trapLineNum=0;
+			//acc2 is always part of trapezoid, 1 and 3 swap depending on if startVel or endVel is greater
 			acc2Lines=0;
 			if(acc1==trapTestAcc){
 				acc1Lines=0;
@@ -547,145 +525,96 @@ public class Arcs {
 			System.out.println("ERROR: Bad Path - hexDist: "+hexDist+"ft");
 			return;
 		}
-		lineNum=endTriLineNum+startTriLineNum+trapLineNum;//zero line
+		double lineNum=endTriLineNum+startTriLineNum+trapLineNum;//zero line
 		lineNum = Math.round(lineNum);
-	}
-	
-	private void drawArcPath2() {	
-		double radiansList[]=new double[(int)lineNum];
 	    //first side
-		accLast2=0;
-		radLast=w.getStartAng();
 		velLast=startVel;
-		double startPos = posLast;
+		double startRad=w.getStartAng();
+		double accLast=0;
+		double deltaPos=0;
+		double deltaVel=0;
+		double deltaAcc=0;
+		double deltaX=0;
+		double deltaY=0;
+		double pos,vel,accel,x,y;
 		for(int line = 0;line < lineNum;line++){
 				acc = findAcc(line);
-				deltaAcc = acc - accLast2;
+				deltaAcc = acc - accLast;
 				deltaVel = acc * timeStep;
-				//if(line == 0 && startVel > 0) {deltaVel+=(startVel * Constants.MAGIC_VEL_CONST);}
 				deltaPos = (velLast + velLast + deltaVel)/2 * timeStep;
-				if(totalDegrees<0){
-					deltaRad = -deltaPos/radius;
-				}else{
-					deltaRad = deltaPos/radius;
-				}
 				
-				deltaX=(deltaPos*Math.cos(radLast+deltaRad));
-				deltaY=(deltaPos*Math.sin(radLast+deltaRad));
+				deltaX=(deltaPos*Math.cos(startRad));
+				deltaY=(deltaPos*Math.sin(startRad));
+				if(backwards) {
+					pos = deltaPos*-1;
+					vel=deltaVel*-1;
+					accel=acc*-1;
+					x=deltaX*-1;
+					y=deltaY*-1;
+				}else {
+					pos=deltaPos;
+					vel=deltaVel;
+					accel=acc;
+					x=deltaX;
+					y=deltaY;
+				}
+
+				Double[] accVel = {pos,vel,accel,0.0,x,y};
+				w.addLeftAcc(accVel);
 
 				if(deltaPos!=0) {posLast+=deltaPos;}
 				if(deltaVel!=0) {velLast+=deltaVel;}
-				if(deltaRad!=0) {radLast+=deltaRad;}
+				if(deltaAcc!=0) {accLast+=deltaAcc;}
 				
-				radiansList[line]=deltaRad;
-				if(backwards) {
-					deltaVel *= -1;
-					acc *= -1;
-					deltaPos *= -1;
-					deltaX *= -1;
-					deltaY *= -1;
-				}
-				Double[] accVel = {deltaPos,deltaVel,(acc),deltaRad,deltaX,deltaY};
-				accLast2=acc;
-
-				if(totalDegrees<0){
-					if(backwards) {
-						w.addLeftAcc(accVel);
-					}else {
-						w.addRightAcc(accVel);
-					}
-				}else{
-					if(backwards) {
-						w.addRightAcc(accVel);
-					}else {
-						w.addLeftAcc(accVel);
-					}
+			    if(line+1==lineNum){//last one
+					//System.out.println("---left side---");
+					//System.out.println("posNow: "+(deltaPos+posLast));
+					System.out.println("posError: "+(totalDistance-Math.abs(deltaPos+posLast)));
 				}
 				
-				
-				if(line+1==lineNum){//last one
-					System.out.println("---left side---");
-					System.out.println("posNow: "+(posLast+deltaPos));
-					System.out.println("posError: "+((startPos+totalDistance)-Math.abs((posLast+deltaPos))));
-					String radList="";
-					for(int i=0;i<=lineNum-1;i++){
-						radList=radList+radiansList[i]+" ";
-					}
-				}
 		}
 		//second side
 		posLast =0.0;
+		accLast=0.0;
 		velLast=startVel;
-		accLast2=0;
-		radius-=(wheelbase/12);
-		double startAng = w.getStartAng();
-		radLast=startAng;
 		for(int line = 0;line < lineNum;line++){
-			//if(line != -1){
-				deltaRad = radiansList[line];
-				if(totalDegrees<0){
-					deltaPos = (-radius*(deltaRad+radLast-startAng)) - posLast;
-				}else{
-					deltaPos = (radius*(deltaRad+radLast-startAng)) - posLast;
-				}
-				deltaVel = ((deltaPos)/timeStep) - velLast;//*2-velLast;
-				acc = ((deltaVel)/timeStep);
-				if(acc<-Constants.ACC_MAX) {
-					//acc=Constants.ACC_MAX * -2;
-					//deltaVel = (acc * timeStep);
-				}else if(acc>Constants.ACC_MAX) {
-					//acc=Constants.ACC_MAX * 2;
-					//deltaVel = (acc * timeStep);
-				}
+			acc = findAcc(line);
+			deltaAcc = acc - accLast;
+			deltaVel = acc * timeStep;
+			deltaPos = (velLast + velLast + deltaVel)/2 * timeStep;
+			
+			deltaX=(deltaPos*Math.cos(startRad));
+			deltaY=(deltaPos*Math.sin(startRad));
+			if(backwards) {
+				pos = deltaPos*-1;
+				vel=deltaVel*-1;
+				accel=acc*-1;
+				x=deltaX*-1;
+				y=deltaY*-1;
+			}else {
+				pos=deltaPos;
+				vel=deltaVel;
+				accel=acc;
+				x=deltaX;
+				y=deltaY;
+			}
 
-				//System.out.println("acc: "+acc+" vel: "+velNow+" pos: "+posNow+" rad: "+radians);
-				
-				deltaX=(deltaPos*Math.cos((deltaRad+radLast)));
-				deltaY=(deltaPos*Math.sin((deltaRad+radLast)));
+			Double[] accVel = {pos,vel,accel,0.0,x,y};
+			w.addRightAcc(accVel);
 
-				if(deltaPos!=0) {posLast+=deltaPos;}
-				if(deltaVel!=0) {velLast+=deltaVel;}
-				if(deltaRad!=0) {radLast+=deltaRad;}
+			if(deltaPos!=0) {posLast+=deltaPos;}
+			if(deltaVel!=0) {velLast+=deltaVel;}
+			if(deltaAcc!=0) {accLast+=deltaAcc;}
+			
+		    if(line+1==lineNum){//last one
+				//System.out.println("---left side---");
+				//System.out.println("posNow: "+(deltaPos+posLast));
+				//System.out.println("posError: "+(totalDistance-Math.abs(deltaPos+posLast)));
+			}
 				
-				if(backwards) {
-					deltaVel *= -1;
-					acc *= -1;
-					deltaPos *= -1;
-					deltaX *= -1;
-					deltaY *= -1;
-				}
-				Double[] accVel = {deltaPos,deltaVel,(acc),deltaRad,deltaX,deltaY};
-				accLast2=acc;
-				
-				if(totalDegrees<0){
-					if(backwards) {
-						w.addRightAcc(accVel);
-					}else {
-						w.addLeftAcc(accVel);
-					}
-				}else{
-					if(backwards) {
-						w.addLeftAcc(accVel);
-					}else {
-						w.addRightAcc(accVel);
-					}
-				}
-				
-				if(line+1==lineNum){//last one
-					//System.out.println("---right side---");
-					//System.out.println("posNow: "+(posLast+posNow));
-					System.out.println("posError2: "+((startPos+totalDistance)-Math.abs((posLast+deltaPos))));
-				}
 		}
-		w.setStartAng(radLast);
 		//System.out.println("acc1Lines: "+acc1Lines+" acc2Lines: "+acc2Lines+" acc3Lines: "+acc3Lines+" flatAccLines: "+flatAccLines);
 		//System.out.println("-------------------------------------------------------------");
-	}
-	
-	public void drawArc(double totalDegrees, double radius, double startVel, double endVel) {
-		//accLast=0;
-		drawArcPath1(totalDegrees,radius,startVel,endVel);
-		drawArcPath2();
 	}
 	
 	private double findAcc(double line){
@@ -732,7 +661,6 @@ public class Arcs {
 		}
 	}
 
-	
 	private double findTime(double time){
 		double timeOff;
 		double timeStep = Constants.TIMESTEP;
@@ -746,10 +674,4 @@ public class Arcs {
 		time/=100;
 		return time;
 	}
-	private double findLineNum(double time){	
-		double timeStep = Constants.TIMESTEP;
-		double lineNum = time / timeStep + 1;// +1 = line of 0's
-		return lineNum;
-	}
-	
 }
