@@ -109,8 +109,8 @@ public class Arcs {
 					trapTime = findTime(trapTime);
 					trapLineNum = trapTime/timeStep;
 					trapDist=(totalDistance-endTriDist)-(trapTime*startVel);
-					if(trapTime%0.04>=0.019){
-						trapTestAcc = trapDist/(((trapTime-0.02)/2)*((trapTime+0.02)/2));
+					if(trapTime%(timeStep*2)>=0.019){
+						trapTestAcc = trapDist/(((trapTime-timeStep)/2)*((trapTime+timeStep)/2));
 						trapTestVel=trapTestAcc*(trapLineNum-1)/2*timeStep;
 					}else{
 						trapTestAcc=(4*trapDist)/(trapTime*trapTime);
@@ -133,8 +133,8 @@ public class Arcs {
 					trapTime = findTime(trapTime);
 					trapLineNum = trapTime/timeStep;
 					trapDist=(totalDistance-endTriDist)-(trapTime*startVel);
-					if(trapTime%0.04>=0.019){
-						trapTestAcc = trapDist/(((trapTime-0.02)/2)*((trapTime+0.02)/2));
+					if(trapTime%(timeStep*2)>=0.019){
+						trapTestAcc = trapDist/(((trapTime-timeStep)/2)*((trapTime+timeStep)/2));
 						trapTestVel=trapTestAcc*(trapLineNum-1)/2*timeStep;
 					}else{
 						trapTestAcc=(4*trapDist)/(trapTime*trapTime);
@@ -153,8 +153,8 @@ public class Arcs {
 				trapTime = findTime(trapTime);
 				trapLineNum = trapTime/timeStep;
 				trapDist=(totalDistance-endTriDist)-(trapTime*startVel);
-				if(trapTime%0.04>=0.019){
-					trapTestAcc = trapDist/(((trapTime-0.02)/2)*((trapTime+0.02)/2));
+				if(trapTime%(timeStep*2)>=0.019){
+					trapTestAcc = trapDist/(((trapTime-timeStep)/2)*((trapTime+timeStep)/2));
 					trapTestVel=trapTestAcc*(trapLineNum-1)/2*timeStep;
 				}else{
 					trapTestAcc=(4*trapDist)/(trapTime*trapTime);
@@ -166,13 +166,13 @@ public class Arcs {
 			
 			if(trapTestVel<=velocityMax){
 				acc1=Math.abs(trapTestAcc);
-				acc1Lines=Math.round(trapTime/2/0.02*10);
+				acc1Lines=Math.round(trapTime/2/timeStep*10);
 				acc1Lines/=10;
 				acc2=-Math.abs(trapTestAcc);
-				acc2Lines=Math.round(trapTime/2/0.02*10);
+				acc2Lines=Math.round(trapTime/2/timeStep*10);
 				acc2Lines/=10;
 				
-				trapLineNum=Math.round(trapTime/0.02);
+				trapLineNum=Math.round(trapTime/timeStep);
 			}else{
 				double trapSingleTriTime=(velocityMax-startVel)/acceleration;
 				trapSingleTriTime=findTime(trapSingleTriTime);
@@ -189,12 +189,12 @@ public class Arcs {
 				bigRectDist=bigRectTime*newMaxVel;
 				
 				acc1=trapSingleTriTestAcc;
-				acc1Lines=Math.round(trapSingleTriTime/0.02*10);
+				acc1Lines=Math.round(trapSingleTriTime/timeStep*10);
 				acc1Lines/=10;
 				acc2=-trapSingleTriTestAcc;
-				acc2Lines=Math.round(trapSingleTriTime/0.02*10);
+				acc2Lines=Math.round(trapSingleTriTime/timeStep*10);
 				acc2Lines/=10;
-				flatAccLines=Math.round(bigRectTime/0.02*10);
+				flatAccLines=Math.round(bigRectTime/timeStep*10);
 				flatAccLines/=10;
 				trapLineNum=acc1Lines+acc2Lines+flatAccLines;
 			}
@@ -267,8 +267,8 @@ public class Arcs {
 						trapTime = findTime(trapTime);
 						trapLineNum = trapTime/timeStep;
 						trapDist=(totalDistance-endTriDist)-(trapTime*startVel);
-						if(trapTime%0.04>=0.019){
-							trapTestAcc = trapDist/(((trapTime-0.02)/2)*((trapTime+0.02)/2));
+						if(trapTime%(timeStep*2)>=0.019){
+							trapTestAcc = trapDist/(((trapTime-timeStep)/2)*((trapTime+timeStep)/2));
 							trapTestVel=trapTestAcc*(trapLineNum-1)/2*timeStep;
 						}else{
 							trapTestAcc=(4*trapDist)/(trapTime*trapTime);
@@ -291,8 +291,8 @@ public class Arcs {
 						trapTime = findTime(trapTime);
 						trapLineNum = trapTime/timeStep;
 						trapDist=(totalDistance-endTriDist)-(trapTime*startVel);
-						if(trapTime%0.04>=0.019){
-							trapTestAcc = trapDist/(((trapTime-0.02)/2)*((trapTime+0.02)/2));
+						if(trapTime%(timeStep*2)>=0.019){
+							trapTestAcc = trapDist/(((trapTime-timeStep)/2)*((trapTime+timeStep)/2));
 							trapTestVel=trapTestAcc*(trapLineNum-1)/2*timeStep;
 						}else{
 							trapTestAcc=(4*trapDist)/(trapTime*trapTime);
@@ -311,8 +311,8 @@ public class Arcs {
 					trapTime = findTime(trapTime);
 					trapLineNum = trapTime/timeStep;
 					trapDist=(totalDistance-endTriDist)-(trapTime*startVel);
-					if(trapTime%0.04>=0.019){
-						trapTestAcc = trapDist/(((trapTime-0.02)/2)*((trapTime+0.02)/2));
+					if(trapTime%(timeStep*2)>=0.019){
+						trapTestAcc = trapDist/(((trapTime-timeStep)/2)*((trapTime+timeStep)/2));
 						trapTestVel=trapTestAcc*(trapLineNum-1)/2*timeStep;
 					}else{
 						trapTestAcc=(4*trapDist)/(trapTime*trapTime);
@@ -324,10 +324,10 @@ public class Arcs {
 				ghostTestVel=trapTestVel+startVel;
 				if(trapTestVel+startVel<=velocityMax){
 					acc1=trapTestAcc;
-					acc1Lines=Math.round(trapTime/2/0.02*10);
+					acc1Lines=Math.round(trapTime/2/timeStep*10);
 					acc1Lines/=10;
 					acc2=-trapTestAcc;
-					acc2Lines=Math.round(trapTime/2/0.02*10);
+					acc2Lines=Math.round(trapTime/2/timeStep*10);
 					acc2Lines/=10;
 					trapLineNum=acc1Lines+acc2Lines;
 				}else{
@@ -347,12 +347,12 @@ public class Arcs {
 					bigRectDist=bigRectTime*newMaxVel;
 					
 					acc1=trapSingleTriTestAcc;
-					acc1Lines=Math.round(trapSingleTriTime/0.02*10);
+					acc1Lines=Math.round(trapSingleTriTime/timeStep*10);
 					acc1Lines/=10;
 					acc2=-trapSingleTriTestAcc;
-					acc2Lines=Math.round(trapSingleTriTime/0.02*10);
+					acc2Lines=Math.round(trapSingleTriTime/timeStep*10);
 					acc2Lines/=10;
-					flatAccLines=Math.round(bigRectTime/0.02*10);
+					flatAccLines=Math.round(bigRectTime/timeStep*10);
 					flatAccLines/=10;
 					trapLineNum=acc1Lines+acc2Lines+flatAccLines;
 				}
@@ -464,10 +464,10 @@ public class Arcs {
 				ghostTestVel=trapTestVel+endVel;
 				if(trapTestVel+endVel<=velocityMax){
 					acc2=trapTestAcc;
-					acc2Lines=Math.round(trapTime/2/0.02*10);
+					acc2Lines=Math.round(trapTime/2/timeStep*10);
 					acc2Lines/=10;
 					acc3=-trapTestAcc;
-					acc3Lines=Math.round(trapTime/2/0.02*10);
+					acc3Lines=Math.round(trapTime/2/timeStep*10);
 					acc3Lines/=10;
 					trapLineNum=acc2Lines+acc3Lines;
 				}else{
@@ -487,12 +487,12 @@ public class Arcs {
 					bigRectDist=bigRectTime*newMaxVel;
 					
 					acc2=trapSingleTriTestAcc;
-					acc2Lines=Math.round(trapSingleTriTime/0.02*10);
+					acc2Lines=Math.round(trapSingleTriTime/timeStep*10);
 					acc2Lines/=10;
 					acc3=-trapSingleTriTestAcc;
-					acc3Lines=Math.round(trapSingleTriTime/0.02*10);
+					acc3Lines=Math.round(trapSingleTriTime/timeStep*10);
 					acc3Lines/=10;
-					flatAccLines=Math.round(bigRectTime/0.02*10);
+					flatAccLines=Math.round(bigRectTime/timeStep*10);
 					flatAccLines/=10;
 					trapLineNum=acc2Lines+acc3Lines+flatAccLines;
 				}
@@ -695,7 +695,7 @@ public class Arcs {
 		}else if(flatAccLines>0){
 			if(acc1==-acc2){
 				if(line<acc1Lines+flatAccLines){
-					System.out.println("ERROR 1; acc1Lines: "+acc1Lines+" ; flatAccLines: "+flatAccLines);
+					//System.out.println("ERROR 1; acc1Lines: "+acc1Lines+" ; flatAccLines: "+flatAccLines);
 					return 0.0;
 				}else {
 					if(line<acc1Lines+flatAccLines+acc2Lines){
@@ -708,7 +708,7 @@ public class Arcs {
 				if(line<acc1Lines+acc2Lines){
 					return acc2;
 				}else if(line<acc1Lines+acc2Lines+flatAccLines){
-					System.out.println("ERROR 2; acc1Lines: "+acc1Lines+" ; flatAccLines: "+flatAccLines);
+					//System.out.println("ERROR 2; acc1Lines: "+acc1Lines+" ; flatAccLines: "+flatAccLines);
 					return 0.0;
 				}else{
 					return acc3;
@@ -717,10 +717,10 @@ public class Arcs {
 		}else{
 			if(Math.abs(acc2Lines%1-0.5)<=0.1){//should be 0.5
 				if(Math.abs(Math.abs(line-0.5)-acc1Lines+1)<=0.1){
-					System.out.println("ERROR 3; acc1Lines: "+acc1Lines+" ; flatAccLines: "+flatAccLines);
+					//System.out.println("ERROR 3; acc1Lines: "+acc1Lines+" ; flatAccLines: "+flatAccLines);
 					return 0.0;
 				}else if(Math.abs(Math.abs(line-0.5)-(acc1Lines+acc2Lines-1))<=0.1){
-					System.out.println("ERROR 4; acc1Lines: "+acc1Lines+" ; flatAccLines: "+flatAccLines);
+					//System.out.println("ERROR 4; acc1Lines: "+acc1Lines+" ; flatAccLines: "+flatAccLines);
 					return 0.0;
 				}else if(line<=acc1Lines+acc2Lines-1){
 					return acc2;

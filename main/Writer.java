@@ -77,12 +77,11 @@ public class Writer {
 				deltaX = accVel[4];
 				deltaY = accVel[5];
 
-				if(accNow>(Constants.ACC_MAX*2)) {accNow=Constants.ACC_MAX*2;System.out.println("ERROR: ACC TOO POS!"+" linenum: "+line);}
-				if(accNow<(Constants.ACC_MAX*-2)) {accNow=Constants.ACC_MAX*-2;System.out.println("ERROR: ACC TOO NEG!"+" linenum: "+line);}
+				if(accNow>(Constants.ACC_MAX*2)) {System.out.println("ERROR: ACC TOO POS!"+" linenum: "+line+" acc: "+accNow);accNow=Constants.ACC_MAX*2;}
+				if(accNow<(Constants.ACC_MAX*-2)) {System.out.println("ERROR: ACC TOO NEG!"+" linenum: "+line+" acc: "+accNow);accNow=Constants.ACC_MAX*-2;}
 
 				posNow=posLast+deltaPos;
 				velNow=velLast+deltaVel;
-				radNow=radLast+deltaRad;
 				xNow=xLast+deltaX;
 				yNow=yLast+deltaY;
 
@@ -124,8 +123,8 @@ public class Writer {
 				deltaY = accVel[5];
 				deltaPos=(velLast*2+deltaVel)/2*.01;
 
-				if(accNow>(Constants.ACC_MAX*2)) {accNow=Constants.ACC_MAX*2;System.out.println("ERROR: ACC TOO POS!"+" linenum: "+(line+lineNum));}
-				if(accNow<(Constants.ACC_MAX*-2)) {accNow=Constants.ACC_MAX*-2;System.out.println("ERROR: ACC TOO NEG!"+" linenum: "+(line+lineNum));}
+				if(accNow>(Constants.ACC_MAX*2)) {System.out.println("ERROR: ACC TOO POS!"+" linenum: "+(line+lineNum)+" acc: "+accNow);accNow=Constants.ACC_MAX*2;}
+				if(accNow<(Constants.ACC_MAX*-2)) {System.out.println("ERROR: ACC TOO NEG!"+" linenum: "+(line+lineNum)+" acc: "+accNow);accNow=Constants.ACC_MAX*-2;}
 				
 				posNow=posLast+deltaPos;
 				velNow=velLast+deltaVel;
@@ -149,7 +148,7 @@ public class Writer {
 					}catch(Exception e){}}
 			}
 		}
-
+		System.out.println("estimated path time: "+lineNum/(100.0)+"sec");
 		try{m_writer.close();System.out.println("Wrote to "+filepath);}catch(Exception e){}
 	}
 }
