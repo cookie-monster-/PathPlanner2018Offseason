@@ -684,6 +684,7 @@ public class Arcs {
 	
 	public void drawArc(double totalDegrees, double radius, double startVel, double endVel) {
 		//accLast=0;
+		flatAccLines = 0.0;//DON'T DELETE THIS LINE
 		drawArcPath1(totalDegrees,radius,startVel,endVel);
 		drawArcPath2();
 	}
@@ -694,6 +695,7 @@ public class Arcs {
 		}else if(flatAccLines>0){
 			if(acc1==-acc2){
 				if(line<acc1Lines+flatAccLines){
+					System.out.println("ERROR 1; acc1Lines: "+acc1Lines+" ; flatAccLines: "+flatAccLines);
 					return 0.0;
 				}else {
 					if(line<acc1Lines+flatAccLines+acc2Lines){
@@ -706,6 +708,7 @@ public class Arcs {
 				if(line<acc1Lines+acc2Lines){
 					return acc2;
 				}else if(line<acc1Lines+acc2Lines+flatAccLines){
+					System.out.println("ERROR 2; acc1Lines: "+acc1Lines+" ; flatAccLines: "+flatAccLines);
 					return 0.0;
 				}else{
 					return acc3;
@@ -714,8 +717,10 @@ public class Arcs {
 		}else{
 			if(Math.abs(acc2Lines%1-0.5)<=0.1){//should be 0.5
 				if(Math.abs(Math.abs(line-0.5)-acc1Lines+1)<=0.1){
+					System.out.println("ERROR 3; acc1Lines: "+acc1Lines+" ; flatAccLines: "+flatAccLines);
 					return 0.0;
 				}else if(Math.abs(Math.abs(line-0.5)-(acc1Lines+acc2Lines-1))<=0.1){
+					System.out.println("ERROR 4; acc1Lines: "+acc1Lines+" ; flatAccLines: "+flatAccLines);
 					return 0.0;
 				}else if(line<=acc1Lines+acc2Lines-1){
 					return acc2;

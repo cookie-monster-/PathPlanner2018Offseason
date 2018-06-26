@@ -20,14 +20,13 @@ public class Main {
 		 * (technically you could also increase distance, but you probably don't want to because that would mess up the path)
 		*/
 		
+
+		//a.drawArc(180, 7.5, 0.0, 0.0);
+		l.drawStraightPath(7, 0.0, 3.0);
+		l.drawStraightPath(7, 3.0, 3.0);
+		l.drawStraightPath(7, 3.0, 0.0);
+		//a.drawArc(90, 5.0, 0.0, 0.0);
 		
-		l.drawStraightPath(17, 0.0, 3.0);
-		a.drawArc(20, 5, 3.0, 0.0);
-		/*a.drawArc(-70, -5, 0.0, 0.0);
-		a.drawArc(70, 5, 0.0, 0.0);
-		a.drawArc(-110, -5, 0.0, 0.0);
-		a.drawArc(110, 5, 0.0, 0.0);
-		*/
 		Writer w = new Writer();
 		//w.printArrays();
 		w.writeFile("testPath");
@@ -35,6 +34,6 @@ public class Main {
 		
 		Reader r = new Reader("testPath");
 		//Example ex = new Example(Plot.data().xy(r.getX(), r.getY()));
-		//Example ex1 = new Example(Plot.data().xy(r.getLinex3(), r.getPosVelAcc()));
+		Example ex1 = new Example(Plot.data().xy(r.getLinex3(), r.getPosVelAcc()));
 	}
 }
