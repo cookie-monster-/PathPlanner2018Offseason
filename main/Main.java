@@ -7,16 +7,16 @@ public class Main {
 		Arcs a = new Arcs();
 		
 
-		a.drawArc(180, -7.5, 0.0, 3.0);
-		l.drawStraightPath(-15, 3.0, 3.0);
-		a.drawArc(70, -5.0, 3.0, 0.0);
+		a.drawArc(180, -7.5, 0.0, 0.0);
+		l.drawStraightPath(-15, 0.0, 0.0);
+		a.drawArc(90, -5.0, 0.0, 0.0);
 		
 		Writer w = new Writer();
 		//w.printArrays();
-		w.writeFile("testPath");
+		w.writeFile("testPath1");
 		//w.writeFile("sideGearDownfieldPath0");
 		
-		Reader r = new Reader("testPath");
+		Reader r = new Reader("testPath1");
 		Example ex = new Example(Plot.data().xy(r.getX(), r.getY()));
 		//Example ex1 = new Example(Plot.data().xy(r.getLinex3(), r.getPosVelAcc()));
 	}

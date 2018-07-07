@@ -65,11 +65,11 @@ public class Writer {
 		double radLast=0;
 		double xNow=0,yNow=0,posNow=0,velNow=0,accNow=0,radNow=0;
 
-	    yLast=-wheelbase/24;//-1.125;
+	    yLast=wheelbase/24;//-1.125;
 	    xLast=0.0;
 		for(int line = -1;line < lineNum;line++){
 			if(line >= 0){
-				Double[] accVel = leftAccs.get(line);
+				Double[] accVel = rightAccs.get(line);
 				deltaPos=accVel[0];
 				deltaVel = accVel[1];
 				accNow = accVel[2];
@@ -104,16 +104,16 @@ public class Writer {
 			
 		}
 		
-		//RIGHT SIDE ----------------------------------------------------------
+		//LEFT SIDE ----------------------------------------------------------
 	    posLast = 0;
 		velLast = 0;
 		accLast = 0;
 		radLast = 0;
 		xLast = 0;
-		yLast = wheelbase/24;
+		yLast = -wheelbase/24;
 		for(int line = -1;line < lineNum;line++){
 			if(line >= 0){
-				Double[] accVel = rightAccs.get(line);
+				Double[] accVel = leftAccs.get(line);
 
 				//deltaPos=accVel[0];
 				deltaVel = accVel[1];
