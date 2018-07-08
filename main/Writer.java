@@ -43,8 +43,8 @@ public class Writer {
 		FileWriter m_writer;
 		try {
 			m_writer = new FileWriter(filepath, false);
-			//m_writer.write(filename + "\n" + ((int)lineNum+1) + "\n");
-			m_writer.write("pos,vel,acc,jerk,gyro,time,x,y\n");
+			m_writer.write(((int)lineNum+1) + "\n");
+			m_writer.write("dt,x,y,pos,vel,acc,jerk,heading\n");
 		} catch ( IOException e ) {
 			System.out.println(e);
 			m_writer = null;
@@ -93,11 +93,11 @@ public class Writer {
 				yLast = yNow;
 					
 				if(m_writer != null){try{
-						m_writer.write(posNow + ","+velNow+","+accNow+",0,"+radNow+","+timeStep+","+xNow+","+yNow+"\n");// jerk, x, y = 0
+						m_writer.write(timeStep+","+xNow+","+yNow+","+posNow + ","+velNow+","+accNow+",0,"+radNow+"\n");// jerk, x, y = 0
 					}catch(Exception e){}}
 			}else{
 				 if(m_writer != null){try{
-						m_writer.write("0,"+0+",0,0,0,"+timeStep+","+xNow+","+yNow+"\n");//first line 0 everything
+					 m_writer.write(timeStep+","+xNow+","+yNow+",0,"+0+",0,0,0"+"\n");//first line 0 everything
 					}catch(Exception e){}}
 				
 			}
@@ -140,11 +140,11 @@ public class Writer {
 				yLast = yNow;
 				
 			    if(m_writer != null){try{
-						m_writer.write(posNow + ","+velNow+","+accNow+",0,"+radNow+","+timeStep+","+xNow+","+yNow+"\n");// jerk, x, y = 0
+			    	m_writer.write(timeStep+","+xNow+","+yNow+","+posNow + ","+velNow+","+accNow+",0,"+radNow+"\n");// jerk, x, y = 0
 					}catch(Exception e){}}
 			}else{
 				 if(m_writer != null){try{
-						m_writer.write("0,"+0+",0,0,0,"+timeStep+","+xNow+","+yNow+"\n");//first line 0 everything
+						m_writer.write(timeStep+","+xNow+","+yNow+",0,"+0+",0,0,0"+"\n");//first line 0 everything
 					}catch(Exception e){}}
 			}
 		}

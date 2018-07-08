@@ -21,17 +21,18 @@ public class Reader {
 		try {
 			BufferedReader r = new BufferedReader(new FileReader(Constants.FILEPATH+filename+".csv"));
 			String line = r.readLine();
+			line = r.readLine();
 			line= r.readLine();
 			String[] list = line.split(",");
 			
 			while(line != null) {
 				list=line.split(",");
-				posLis.add(Double.parseDouble(list[0]));
-				velLis.add(Double.parseDouble(list[1]));
-				accLis.add(Double.parseDouble(list[2]));
-				radLis.add(Double.parseDouble(list[4]));
-				xLis.add(Double.parseDouble(list[6]));
-				yLis.add(Double.parseDouble(list[7]));
+				xLis.add(Double.parseDouble(list[1]));
+				yLis.add(Double.parseDouble(list[2]));
+				posLis.add(Double.parseDouble(list[3]));
+				velLis.add(Double.parseDouble(list[4]));
+				accLis.add(Double.parseDouble(list[5]));
+				radLis.add(Double.parseDouble(list[7]));
 				//System.out.println(x+y);
 				line = r.readLine();
 			}
