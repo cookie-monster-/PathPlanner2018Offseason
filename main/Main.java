@@ -6,12 +6,15 @@ public class Main {
 		Lines l = new Lines();
 		Arcs a = new Arcs();
 		
-
-		a.drawArc(-90, -3.5, 0.0, 0.0);
-		//l.drawStraightPath(-1.0, 2.0, 2.0);
-		//a.drawArc(20, -3.5, 2.0, 0.0);
+    //PYRAMID TO LEFT SCALE
+		a.drawArc(-170, -5.25, 0.0, 4.5);
+		l.drawStraightPath(-19.5, 4.5, 3.0);
+		a.drawArc(-100, -4.25, 3.0, 0.0);
 		
-		
+/*	RIGHT SIDE TO RIGHT SCALE 90 DEGREES	
+ * l.drawStraightPath(-22.5, 0.0, 3.0);
+		a.drawArc(90, -4.0, 3.0, 0.0);
+	*/	
 		Writer w = new Writer();
 		//w.printArrays();
 		w.writeFile("testArc");
